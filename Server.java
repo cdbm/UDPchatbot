@@ -1,33 +1,27 @@
-
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.util.Scanner;
+import java.net.DatagramSocket;
 
 public class Server {
+	public static void main(String args[]) throws IOException {
+		DatagramSocket serverSocket = new DatagramSocket(9876);
+		byte[] recData = new byte[1024];
+		int i = 0;
 
-	public static void main(String[] args) throws IOException {
-		Scanner in = new Scanner(System.in);
-		DatagramSocket serverSocket = new DatagramSocket(3000);
-		byte[] sendData;
-		InetAddress clientIP;
-		int port;
-		String resp = "";
+		FileOutputStream file = new FileOutputStream(
+				"D:/Users/cdbm/Documents/testing-received.7z");
+		
+
+
 		while (true) {
-			byte[] receiveData = new byte[100];
-			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-			serverSocket.receive(receivePacket);
-			clientIP = receivePacket.getAddress();
-			port = receivePacket.getPort();
-			String msgS = new String (receiveData, "UTF-8");
-			System.out.println(msgS);
-			resp = in.nextLine();
-			sendData = (resp).getBytes();
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientIP, port);
-			serverSocket.send(sendPacket);
+			
+
+			DatagramPacket recPacket = new DatagramPacket(recData, recData.length);
+			serverSocket.receive(recPacket);
+			file.write(recPacket.getData());
+			System.out.println("\nPacket" + ++i + " written to file\n");
+			file.flush();
 		}
-
 	}
-
 }
